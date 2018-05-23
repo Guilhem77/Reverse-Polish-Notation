@@ -8,11 +8,6 @@ public class Evaluator
     int number2;
     Stack<Integer> numbers = new Stack<>();
 
-    public String[] cutBySpace(String expression)
-    {
-        return expression.split(" ");
-    }
-
     public boolean operatorDetect(String str)
     {
         return (str.equals("+") || str.equals("-") || str.equals("*") || str.equals("/"));
@@ -20,7 +15,7 @@ public class Evaluator
 
     long evaluate(String expression) throws DivideException
     {
-        String[] symbols = cutBySpace(expression);
+        String[] symbols = expression.split(" ");
 
         for (String str : symbols)
         {
