@@ -1,5 +1,7 @@
 package rpn;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Stack;
 
 public class Evaluator
@@ -7,6 +9,28 @@ public class Evaluator
     int number1;
     int number2;
     Stack<Integer> numbers = new Stack<>();
+
+    private final Collection<ResultListener> resultListeners = new ArrayList<ResultListener>();
+
+    public void addResultListener(ResultListener resultListener)
+    {
+        resultListeners.add(resultListener);
+    }
+
+    public Evaluator()
+    {
+        ResultListener resultListener = new ResultListener()
+        {
+            @Override
+            public Integer onResultReadyEvent(Integer newResult)
+            {
+                System.out.println("OKONAUNCHANGEMENT!!!");
+                return newResult;
+            }
+        };
+
+        this.addResultListener(resultListener);
+    }
 
     public boolean operatorDetect(String str)
     {
@@ -65,6 +89,19 @@ public class Evaluator
 
     public Integer getResutl()
     {
-        return numbers.pop();
+        Integer retult = numbers.pop();
+        fireResultCharged(4,retult);
+        return retult;
+    }
+
+    protected void fireResultCharged(Integer oldResult, Integer newResult)
+    {
+        if(!newResult.equals(oldResult))
+        {
+            for(ResultListener listener : resultListeners)
+            {
+                listener.onResultReadyEvent(newResult);
+            }
+        }
     }
 }
